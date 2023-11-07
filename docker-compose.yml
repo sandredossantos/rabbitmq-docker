@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        ports:
+            - 5672:5672
+            - 8080:15672
+        volumes:
+            - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+            - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config

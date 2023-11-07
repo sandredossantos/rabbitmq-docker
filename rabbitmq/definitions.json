@@ -1,0 +1,122 @@
+{
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "fd0GyzAf6C6hmgCJ5VU+TSyzUNlzypPlGb7VDKkqUvJqVxyd",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    { "name": "/" },
+    { "name": "tms" }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "guest",
+      "vhost": "tms",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": [],
+  "policies": [
+    {
+      "vhost": "/",
+      "name": "ha",
+      "pattern": "",
+      "definition": {
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic",
+        "ha-sync-batch-size": 5
+      }
+    },
+    {
+      "vhost": "tms",
+      "name": "ha",
+      "pattern": "",
+      "definition": {
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic",
+        "ha-sync-batch-size": 5
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "tms.poidownloadmanager",
+      "vhost": "tms",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "tms.portal",
+      "vhost": "tms",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "packagefile.digest",
+      "vhost": "tms",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "downloadsession.status.v3",
+      "vhost": "tms",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tms.notification_queue",
+      "vhost": "tms",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "tms.poidownloadmanager",
+      "vhost": "tms",
+      "destination": "packagefile.digest",
+      "destination_type": "queue",
+      "routing_key": "packagefile.digest",
+      "arguments": {}
+    },
+    {
+      "source": "tms.poidownloadmanager",
+      "vhost": "tms",
+      "destination": "downloadsession.status.v3",
+      "destination_type": "queue",
+      "routing_key": "downloadsession.status.v3",
+      "arguments": {}
+    },
+    {
+      "source": "tms.portal",
+      "vhost": "tms",
+      "destination": "tms.notification_queue",
+      "destination_type": "queue",
+      "routing_key": "tms.notification",
+      "arguments": {}
+    }
+  ]
+}
